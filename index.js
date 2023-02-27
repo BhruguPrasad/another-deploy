@@ -2,7 +2,7 @@
 const bcrypt = require("bcryptjs/dist/bcrypt")
 const express = require("express");
 const jwt = require("jsonwebtoken");
-
+var cors = require('cors')
 const UserModel = require("./models/User.model")
 const flightsRouter = require("./routes/Flights.routes");
 const connection = require("./configs/db");
