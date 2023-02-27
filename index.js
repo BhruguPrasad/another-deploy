@@ -9,6 +9,7 @@ const connection = require("./configs/db");
 
 const app = express();
 app.use(express.json());
+app.use(cors())
 require("dotenv").config()
 const PORT = process.env.PORT || 3000
 app.get("/",(req,res)=>{
