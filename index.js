@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 var cors = require('cors')
 const UserModel = require("./models/User.model")
 const flightsRouter = require("./routes/Flights.routes");
+const PostedRouter = require("./routes/Posted.routes");
 const connection = require("./configs/db");
 
 const app = express();
@@ -49,6 +50,7 @@ app.post("/api/login",async(req,res) =>{
 })
 
 app.use("/api/flights",flightsRouter)
+app.use("/classified",PostedRouter)
 
 app.listen(PORT,async () =>{
     try{
