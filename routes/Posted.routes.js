@@ -5,22 +5,14 @@ const PostedRouter = express.Router();
 PostedRouter.get("/", async (req, res) => {
     // const flight = await PostedModel.find()
     // res.send(flight)
-    let {category,order,page,name} = req.query;
+    let {category,order,page,q} = req.query;
     let data = await PostedModel.find((category)?{category : category}:{})
+    .q((q)?{name:q}:{})
     .sort({
     postedAt: order == "asc" || order == "ASC" ? 1 : -1,
     }).skip((page-1)*4)
     .limit(4)
     
-    res.send(data);
-})
-PostedRouter.get("/", async (req, res) => {
-    let {order,page,name} = req.query;
-    let data = await PostedModel.find((name)?{name:name}:{})
-    .sort({
-    postedAt: order == "asc" || order == "ASC" ? 1 : -1,
-    }).skip((page-1)*4)
-    .limit(4)
     res.send(data);
 })
 
