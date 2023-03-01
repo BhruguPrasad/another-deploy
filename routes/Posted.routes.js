@@ -3,13 +3,24 @@ const PostedModel = require("../models/Posted.model");
 const PostedRouter = express.Router();
 
 PostedRouter.get("/", async (req, res) => {
-    // const airline = req.query
-   let { category,order,page,name } = req.query;
-   let data = await PostedModel.find(((category)?{category : category}:{})||((name)?{name:name}:{}))
+    // const flight = await PostedModel.find()
+    // res.send(flight)
+    let {category,order,page,name} = req.query;
+    let data = await PostedModel.find((category)?{category : category}:{})
     .sort({
     postedAt: order == "asc" || order == "ASC" ? 1 : -1,
     }).skip((page-1)*4)
-    .limit(4);
+    .limit(4)
+    
+    res.send(data);
+})
+PostedRouter.get("/", async (req, res) => {
+    let {order,page,name} = req.query;
+    let data = await PostedModel.find((name)?{name:name}:{})
+    .sort({
+    postedAt: order == "asc" || order == "ASC" ? 1 : -1,
+    }).skip((page-1)*4)
+    .limit(4)
     res.send(data);
 })
 
