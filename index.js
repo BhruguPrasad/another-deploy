@@ -18,7 +18,7 @@ app.get("/",(req,res)=>{
 })
 app.get('/randomword', (req, res) => {
     const randomWord = randomWords();
-    res.send(randomWord);
+    res.json({word:randomWord});
 });
 app.post("/api/register",async(req,res) =>{
     const {email,password,name} = req.body;
