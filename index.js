@@ -2,6 +2,7 @@
 const bcrypt = require("bcryptjs/dist/bcrypt")
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const randomWords = require('random-words');
 var cors = require('cors')
 const UserModel = require("./models/User.model")
 const PostedRouter = require("./routes/Posted.routes");
@@ -15,7 +16,10 @@ const PORT = process.env.PORT || 3000
 app.get("/",(req,res)=>{
     res.send("Hello World")
 })
-
+app.get('/randomword', (req, res) => {
+    const randomWord = randomWords();
+    res.send(randomWord);
+});
 app.post("/api/register",async(req,res) =>{
     const {email,password,name} = req.body;
     await bcrypt.hash(password,6,function(err,hash){
