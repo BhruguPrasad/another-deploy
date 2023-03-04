@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const randomWords = require('random-words');
 var cors = require('cors')
 const UserModel = require("./models/User.model")
-const PostedRouter = require("./routes/Posted.routes");
 const connection = require("./configs/db");
 
 const app = express();
@@ -20,7 +19,7 @@ app.get('/randomword', (req, res) => {
     const randomWord = randomWords();
     res.json({word:randomWord});
 });
-app.post("/api/register",async(req,res) =>{
+app.post("/api/signup",async(req,res) =>{
     const {email,password,name} = req.body;
     await bcrypt.hash(password,6,function(err,hash){
         if(err){
@@ -28,7 +27,7 @@ app.post("/api/register",async(req,res) =>{
         }
         const user = new UserModel({email,password:hash,name})
         user.save()
-        return res.send("Signup successful")
+        return res.json({msg : "Signup is successfull"})
     })
 })
 app.post("/api/login",async(req,res) =>{
@@ -51,8 +50,22 @@ app.post("/api/login",async(req,res) =>{
         }
     })
 })
-
-app.use("/classified",PostedRouter)
+const authenticate = (req,res,next) =>{
+    if(!req.headers.authorization){
+        return res.send("Login First");
+    }
+    const token = req.headers.authorization.split(" ")[1]
+    jwt.verify(token,process.env.jwt_secret_key,(err,decode) =>{
+        if(err){
+            return res.send("Login Please");
+        }
+        next()
+    })
+}
+app.use(authenticate)
+app.get("/dashboard",(req,res)=>{
+    res.json({message:"You can access"})
+})
 
 app.listen(PORT,async () =>{
     try{
