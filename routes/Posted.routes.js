@@ -3,18 +3,15 @@ const PostedModel = require("../models/Posted.model");
 const PostedRouter = express.Router();
 
 PostedRouter.get("/", async (req, res) => {
-    let {contract} = req.query;
-    let data = await PostedModel.find((contract)?{contract : contract}:{})
-    res.send(data);
-})
-PostedRouter.get("/loc", async (req, res) => {
-    let {location} = req.query;
-    let data = await PostedModel.find((location)?{location : location}:{})
-    res.send(data);
-})
-PostedRouter.get("/sear", async (req, res) => {
-    let {search} = req.query;
-    let data = await PostedModel.find((search)?{name : search}:{})
+    let {contract,location,search} = req.query;
+    let data ;
+    if(contract){
+       data = await PostedModel.find((contract)?{contract : contract}:{})
+    }else if(location){
+       data = await PostedModel.find((location)?{location:location}:{})
+    }else if(search){
+       data =  await PostedModel.find((search)?{name : search}:{})
+    }
     res.send(data);
 })
 
