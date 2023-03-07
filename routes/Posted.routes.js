@@ -4,12 +4,14 @@ const PostedRouter = express.Router();
 
 PostedRouter.get("/", async (req, res) => {
     let {contract,location,search} = req.query;
-    let data ;
-    if(contract){
+    let data = await PostedModel.find({});
+    if(contract!=""){
        data = await PostedModel.find((contract)?{contract : contract}:{})
-    }else if(location){
+    }
+    if(location!=""){
        data = await PostedModel.find((location)?{location:location}:{})
-    }else if(search){
+    }
+    if(search!=""){
        data =  await PostedModel.find((search)?{name : search}:{})
     }
     res.send(data);
