@@ -3,22 +3,15 @@ const PostedModel = require("../models/Posted.model");
 const PostedRouter = express.Router();
 
 PostedRouter.get("/", async (req, res) => {
-    // const flight = await PostedModel.find()
-    // res.send(flight)
-    let {category,order,page} = req.query;
-    let data = await PostedModel.find((category)?{category : category}:{})
-    .sort({
-    postedAt: order == "asc" || order == "ASC" ? 1 : -1,
-    }).skip((page-1)*4)
-    .limit(4)
-    
+    let {contract,location} = req.query;
+    let data = await PostedModel.find((contract)?{contract : contract}:{},(location)?{location:location}:{})
     res.send(data);
 })
 
 PostedRouter.post("/",async (req,res) =>{
-    const {name,description,category,image,location,postedAt,price} = req.body;
+    const {name,position,contract,location} = req.body;
     const newpost = new PostedModel({
-        name,description,category,image,location,postedAt,price
+        name,position,contract,location
     })
     await newpost.save()
     res.send({message:"Posted created successfully",newpost})
@@ -26,7 +19,6 @@ PostedRouter.post("/",async (req,res) =>{
 
 PostedRouter.delete("/:userId",async (req,res) =>{
     const noteId = req.params.userId
-    
     const newnote =await PostedModel.findOneAndDelete({_id : noteId})
     if(newnote){
         res.send("Delete")
